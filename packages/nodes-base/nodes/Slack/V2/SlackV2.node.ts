@@ -52,6 +52,9 @@ import {
 	sendAndWaitWebhook,
 } from '../../../utils/sendAndWait/utils';
 
+const toStringArray = (value: string | string[]): string[] =>
+	Array.isArray(value) ? value : [value];
+
 export class SlackV2 implements INodeType {
 	description: INodeTypeDescription;
 
@@ -526,7 +529,7 @@ export class SlackV2 implements INodeType {
 						const returnAll = this.getNodeParameter('returnAll', i);
 						const filters = this.getNodeParameter('filters', i);
 						if (filters.types) {
-							qs.types = (filters.types as string[]).join(',');
+							qs.types = toStringArray(filters.types as string | string[]).join(',');
 						}
 						if (filters.excludeArchived) {
 							qs.exclude_archived = filters.excludeArchived as boolean;
@@ -692,7 +695,7 @@ export class SlackV2 implements INodeType {
 							body.return_im = options.returnIm as boolean;
 						}
 						if (options.users) {
-							body.users = (options.users as string[]).join(',');
+							body.users = toStringArray(options.users as string | string[]).join(',');
 						}
 						responseData = await slackApiRequest.call(
 							this,
@@ -1100,7 +1103,7 @@ export class SlackV2 implements INodeType {
 						const fileBody: IDataObject = {};
 
 						if (options.channelIds) {
-							body.channels = (options.channelIds as string[]).join(',');
+							body.channels = toStringArray(options.channelIds as string | string[]).join(',');
 						}
 						if (options.channelId) {
 							body.channel_id = options.channelId as string;
@@ -1225,7 +1228,7 @@ export class SlackV2 implements INodeType {
 							qs.ts_to = filters.tsTo as string;
 						}
 						if (filters.types) {
-							qs.types = (filters.types as string[]).join(',');
+							qs.types = toStringArray(filters.types as string | string[]).join(',');
 						}
 						if (filters.userId) {
 							qs.user = filters.userId as string;
